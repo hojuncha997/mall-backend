@@ -1,5 +1,7 @@
 package com.test.mallapi;
 
+import com.test.mallapi.dto.PageRequestDTO;
+import com.test.mallapi.dto.PageResponseDTO;
 import com.test.mallapi.dto.TodoDTO;
 import com.test.mallapi.service.TodoService;
 import lombok.extern.log4j.Log4j2;
@@ -53,4 +55,16 @@ public class TodoServiceTest {
         Long tno = 101L;
         todoService.remove(tno);
     }
+
+    @Test
+    public void testList() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(2)
+                .size(10)
+                .build();
+
+        PageResponseDTO<TodoDTO> response = todoService.list(pageRequestDTO);
+        log.info(response);
+    }
+
 }

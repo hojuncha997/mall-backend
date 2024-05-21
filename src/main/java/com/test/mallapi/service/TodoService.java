@@ -1,5 +1,7 @@
 package com.test.mallapi.service;
 
+import com.test.mallapi.dto.PageRequestDTO;
+import com.test.mallapi.dto.PageResponseDTO;
 import com.test.mallapi.dto.TodoDTO;
 
 public interface TodoService {
@@ -10,4 +12,6 @@ public interface TodoService {
     void modify(TodoDTO todoDTO);
 
     void remove(Long tno);
+
+    PageResponseDTO<TodoDTO> list(PageRequestDTO pageRequestDTO);
 }
