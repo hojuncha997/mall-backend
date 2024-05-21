@@ -1,14 +1,13 @@
 package com.test.mallapi.service;
 
-import com.test.mallapi.domain.Todo;
-import com.test.mallapi.dto.TodoDto;
+import com.test.mallapi.dto.TodoDTO;
 
 public interface TodoService {
-    Long register(TodoDto todo);
+    Long register(TodoDTO todo);
 
-    TodoDto get(Long tno);
+    TodoDTO get(Long tno);
 
-    void modify(TodoDto todoDto);
+    void modify(TodoDTO todoDTO);
 
     void remove(Long tno);
 }

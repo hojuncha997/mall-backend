@@ -1,6 +1,6 @@
 package com.test.mallapi;
 
-import com.test.mallapi.dto.TodoDto;
+import com.test.mallapi.dto.TodoDTO;
 import com.test.mallapi.service.TodoService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ public class TodoServiceTest {
 
     @Test
     public void testRegister() {
-        TodoDto todoDto = TodoDto.builder()
+        TodoDTO todoDto = TodoDTO.builder()
                 .title("서비스 테스트")
                 .writer("tester")
                 .dueDate(LocalDate.of(2024, 05, 19))
@@ -32,19 +32,19 @@ public class TodoServiceTest {
     @Test
     public void testGet() {
         Long tno = 101L;
-        TodoDto todoDto = todoService.get(tno);
-        log.info(todoDto);
+        TodoDTO todoDTO = todoService.get(tno);
+        log.info(todoDTO);
     }
 
     @Test
     public void testUpdate() {
-        TodoDto todoDto = TodoDto.builder()
+        TodoDTO todoDTO = TodoDTO.builder()
                 .tno(101L)
                 .title("서비스 수정")
                 .writer("tester2")
                 .dueDate(LocalDate.of(2025, 03, 11))
                 .build();
-        todoService.modify(todoDto);
+        todoService.modify(todoDTO);
 
     }
 

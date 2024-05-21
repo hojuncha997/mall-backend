@@ -1,7 +1,7 @@
 package com.test.mallapi.service;
 
 import com.test.mallapi.domain.Todo;
-import com.test.mallapi.dto.TodoDto;
+import com.test.mallapi.dto.TodoDTO;
 import com.test.mallapi.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,28 +23,28 @@ public class TodoServiceImpl implements TodoService {
 
 
     @Override
-    public Long register(TodoDto todoDto) { // 등록
+    public Long register(TodoDTO todoDTO) { // 등록
         log.info(".........");
 
-        Todo todo = modelMapper.map(todoDto, Todo.class);
+        Todo todo = modelMapper.map(todoDTO, Todo.class);
         Todo savedTodo = todoRepository.save(todo);
 
         return savedTodo.getTno();
     }
 
     @Override
-    public TodoDto get(Long tno) {
+    public TodoDTO get(Long tno) {
         Optional<Todo> result = todoRepository.findById(tno);
 
 
         Todo todo = result.orElseThrow();
-        TodoDto dto = modelMapper.map(todo, TodoDto.class);
+        TodoDTO dto = modelMapper.map(todo, TodoDTO.class);
 
         return dto;
     }
 
     @Override
-    public void modify(TodoDto todoDto) {
+    public void modify(TodoDTO todoDto) {
         Optional<Todo> result = todoRepository.findById(todoDto.getTno());
 
         Todo todo = result.orElseThrow();
