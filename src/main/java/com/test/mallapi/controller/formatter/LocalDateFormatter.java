@@ -29,6 +29,6 @@ public class LocalDateFormatter  implements Formatter<LocalDate> {
     그렇기 때문에 이를 변환해 주는 formatter를 추가해서 이 과정을 자동화 한다.
 
     작성을 완료하면 스프링 MVC의 동작 과정에서 사용될 수 있도록 설정을 추가해 주어야 한다.
-    config 패키지에 CustomServiceConfig 클래스를 추가해서 등록해준다.
+    config 패키지에 CustomServletConfig 클래스를 추가해서 등록해준다.
 
 */
