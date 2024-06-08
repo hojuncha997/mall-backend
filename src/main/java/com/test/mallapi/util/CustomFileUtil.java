@@ -21,7 +21,12 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,6 +74,15 @@ public class CustomFileUtil {
 
             try {
                 Files.copy(multipartFile.getInputStream(), savePath);
+
+                String contentType = multipartFile.getContentType();
+                if(contentType != null && contentType.startsWith("image")) {
+                    //  이미지 여부 확인
+                    Path thumbnailPath = Paths.get(uploadPath, "s_" + saveName);
+
+                    //  이미지 파일의 경우 썸네일을 생성한다. 썸네일 파일은 200x200 크기로 생성한다. 이로써 원본 파일이 생성될 때 s_로 시작하는 썸네일 파일도 같이 생성된다.
+                    Thumbnails.of(savePath.toFile()).size(200, 200).toFile(thumbnailPath.toFile());
+                }
                 uploadNames.add(saveName);
 
             }catch (IOException e) {
@@ -78,4 +92,25 @@ public class CustomFileUtil {
         return uploadNames;
     }
 
+    /*
+    getFile()은 ProductController에서 특정 파일을 조회할 때 사용된다.
+    파일 데이터를 읽어서 ResponseEntity<Resource>로 반환한다. */
+    public ResponseEntity<Resource> getFile(String fileName) {
+        Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
+
+        if(!resource. isReadable()) {
+            resource  = new FileSystemResource(uploadPath + File.separator + "default.jpeg");
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+
+        try {
+            // getFile()은 파일 종류마다 다른 HTTP헤더 Content-Type을 생성해야 하기 때문에 Files.probeContentType()을 이용해서 헤더 메시지를 생성한다.
+            headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        return ResponseEntity.ok().headers(headers).body(resource);
+    }
 }
