@@ -138,6 +138,13 @@ public class ProductServiceImpl implements ProductService{
 
     }
 
+    @Override
+    public void remove(Long pno) {
+
+        productRepository.updateToDelete(pno, true);
+
+    }
+
 
     // dto를 엔티티로 변경
     private Product dtoToEntity(ProductDTO productDTO) {
