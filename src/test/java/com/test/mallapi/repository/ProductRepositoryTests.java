@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -80,8 +81,16 @@ public class ProductRepositoryTests {
         *   testRead2()는 @Transactional 없이도 테이블들을 조인해서 한 번에 로딩한다.
         *  이는 Product 엔티티 클래스에 @EntityGraph(attributePaths = "imageList")를 적용했기 때문이다.
         **/
-}
+    }
 
+    @Commit
+    @Transactional
+    @Test
+    public void testDelete() {
+        Long pno = 2L;
+
+        productRepository.updateToDelete(pno, true);
+    }
 
 }
 

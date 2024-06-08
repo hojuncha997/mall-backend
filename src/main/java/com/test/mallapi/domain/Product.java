@@ -86,3 +86,13 @@ public class Product {
  * 현재 Product 엔티티 클래스에는 @ToString(exclude = "imageList")가 적용되어 있어서 이미지 리스트를 제외하고 출력하도록 설정되어 있다.
  * 해당 설정이 없다면 이미지 리스트를 출력하기 위해서는 이미지 리스트 테이블에 접근하는 쿼리가 추가로 실행된다.
  * */
+
+
+/*
+* 실제 DB에서, 상품 삭제는 구매 기록과 이어지기 때문에 주의해야 한다. 특정 상품이 DB에서 삭제되면 해당 상품 데이터를 사용한 모든 구매나 문의 등의
+* 데이터들이 함께 삭제되어야 한다(PK와 FK의 관계). 실제 모든 데이터들이 삭제되어야 한다면 일이 복잡해진다.
+* 이에 대한 대안으로 실제 물리적 삭제(delete)가 아닌 논리적 삭제(delFlag)를 사용하는 방법이 있다. Soft Delete라고도 불리우는 이 방법은
+* delete 대신에 update를 사용해서 delFlag를 true로 변경하는 방법이다. 대부분의 DB에는 boolean 타입이 없기 때문에 0과 1로 처리한다.
+* ProductRepository에는 @Query와 @Modifying을 이용해서 update, delete 등의 JPQL을 실행할 수 있다.
+*
+* */
