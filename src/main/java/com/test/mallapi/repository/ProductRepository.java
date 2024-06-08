@@ -1,6 +1,8 @@
 package com.test.mallapi.repository;
 
 import com.test.mallapi.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,6 +29,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("update Product p set p.delFlag = :flag where p.pno = :pno")  // 의미는 Product 엔티티를 수정하는데 pno가 일치하는 것을 업데이트 처리하도록 설정.
     void updateToDelete(@Param("pno") Long pno, @Param("flag") boolean flag); // pno를 파라미터로 받아서 Product 엔티티를 수정하는 메서드. delFlag를 true로 변경한다.
 
+    // Product 엔티티와 ProductImage 엔티티를 조회하는데 ord가 0이고 delFlag가 false인 것을 가져오도록 설정.
+    @Query("select p, pi from Product p left join p.imageList pi where pi.ord = 0 and p.delFlag = false")
+    Page<Object[]> selectList(Pageable pageable); // Product 엔티티와 ProductImage 엔티티를 조회하는 메서드. Pageable을 파라미터로 받아서 처리한다.
 
 
 }
