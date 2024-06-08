@@ -29,6 +29,15 @@ public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
 
+
+
+    /*
+     * ProductRepository를 통해서 Page(Object[]) 타입의 결과 데이터를 가져온다.
+     * 각 Object[]는 Product와 ProductImage를 담고 있다.
+     * 반복처리로 Product와 ProductImage를 ProductDTO 타입으로 변환한다.
+     * 변환된 ProductDTO를 List<ProductDTO>로 처리하고 전체 데이터의 개수를 이용해서 PageResponseDTO를 생성하고 반환한다.
+     *
+     * */
     @Override
     public PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO) {
 
@@ -73,13 +82,52 @@ public class ProductServiceImpl implements ProductService{
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
+
+
+
+    // 등록처리를 위해서 ProductDTO를 PRoduct와 ProductImage로 타입의 객체들로 만들어서 처리한다
+    @Override
+    public Long register(ProductDTO productDTO) {
+
+            Product product = dtoToEntity(productDTO);
+
+            Product result = productRepository.save(product);
+
+            return result.getPno();
+
+    }
+
+    // dto를 엔티티로 변경
+    private Product dtoToEntity(ProductDTO productDTO) {
+
+        Product product = Product.builder()
+                .pname(productDTO.getPname())
+                .pdesc(productDTO.getPdesc())
+                .price(productDTO.getPrice())
+                .build();
+
+        // 업로드 처리가 끝난 파일들의 이름 리스트
+        List<String> uploadFileNames = productDTO.getUploadFileNames();
+
+        if(uploadFileNames == null) {
+            // 업로드 파일이 없는 Product(엔티티) 반환.
+            return product;
+        }
+
+        // 업로드 파일이 있는 경우, 엔티티에 이미지 파일들을 추가하고
+        uploadFileNames.stream().forEach(uploadName -> {
+            product.addImageString(uploadName);
+        });
+
+        // 엔티티를 반환
+        return product;
+    }
+
+
+
+
+
+
 }
 
 
-/*
- * ProductRepository를 통해서 Page(Object[]) 타입의 결과 데이터를 가져온다.
- * 각 Object[]는 Product와 ProductImage를 담고 있다.
- * 반복처리로 Product와 ProductImage를 ProductDTO 타입으로 변환한다.
- * 변환된 ProductDTO를 List<ProductDTO>로 처리하고 전체 데이터의 개수를 이용해서 PageResponseDTO를 생성하고 반환한다.
- *
- * */
