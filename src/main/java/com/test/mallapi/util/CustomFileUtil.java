@@ -113,4 +113,35 @@ public class CustomFileUtil {
 
         return ResponseEntity.ok().headers(headers).body(resource);
     }
+
+
+    /*
+    * deleteFiles() : 파일 삭제 메서드
+    * : 첨부파일은 수정이라는 개념이 존재하지 않는다. 기존 파일들을 삭제하고 새 파일로 대체하는 개념이기 때문에 삭제가 필요하다.
+    * 파일 삭제 기능은 파일 이름을 기준으로 한 번에 여러 개의 파일을 삭제하는 기능을 deleteFiles()로 구현한다.
+    *
+    * 파일 삭제는 컨트롤러/서비스 게층에서 DB 작업이 완료된 후에 필요 없는 파일들을 삭제하는 용도로 처리할 때 사용한다.
+    * */
+    public void deleteFiles(List<String> fileNames) {
+        if(fileNames == null || fileNames.size() == 0) {
+            return;
+        }
+
+        fileNames.forEach(fileName -> {
+
+            // 썸네일이 있는지 확인하고 삭제
+            String thumbnailFileName = "s_" + fileName;
+            Path thumbnailPath = Paths.get(uploadPath, thumbnailFileName);
+            Path filePath = Paths.get(uploadPath, fileName);
+
+            try {
+                Files.deleteIfExists(filePath);
+                Files.deleteIfExists(thumbnailPath);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        });
+    }
+
+
 }
