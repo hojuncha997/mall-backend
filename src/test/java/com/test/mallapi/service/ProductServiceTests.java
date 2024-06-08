@@ -51,4 +51,12 @@ public class ProductServiceTests {
 
         productService.register(productDTO);
     }
+
+    @Test
+    public void testRead() {
+        Long pno = 12L;
+        ProductDTO productDTO = productService.get(pno);
+        log.info(productDTO);
+        log.info(productDTO.getUploadFileNames());
+    }
 }

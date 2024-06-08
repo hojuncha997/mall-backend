@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,6 +98,47 @@ public class ProductServiceImpl implements ProductService{
 
     }
 
+    @Override
+    public ProductDTO get(Long pno) {
+
+        java.util.Optional<Product> result = productRepository.selectOne(pno);
+
+        Product product = result.orElseThrow();
+
+        ProductDTO productDTO = entityToDTO(product);
+
+        return productDTO;
+    }
+
+    @Override
+    public void modify(ProductDTO productDTO) {
+
+        // step1: read
+        Optional<Product> result = productRepository.findById(productDTO.getPno());
+
+        Product product = result.orElseThrow();
+
+        // step2: modify entity
+        product.changeName(productDTO.getPname());
+        product.changeDesc(productDTO.getPdesc());
+        product.changePrice(productDTO.getPrice());
+
+        // step3: clear existing image list
+        product.clearList();
+
+        List<String> uploadFileNames = productDTO.getUploadFileNames();
+
+        // step4: add new image list
+        if(uploadFileNames != null && uploadFileNames.size() > 0) {
+            uploadFileNames.stream().forEach(uploadName -> {
+                product.addImageString(uploadName);
+            });
+        }
+        productRepository.save(product);
+
+    }
+
+
     // dto를 엔티티로 변경
     private Product dtoToEntity(ProductDTO productDTO) {
 
@@ -123,7 +165,29 @@ public class ProductServiceImpl implements ProductService{
         return product;
     }
 
+    // 엔티티를 dto로 변경
+    private ProductDTO entityToDTO(Product product) {
 
+        ProductDTO productDTO = ProductDTO.builder()
+                .pno(product.getPno())
+                .pname(product.getPname())
+                .pdesc(product.getPdesc())
+                .price(product.getPrice())
+                .build();
+
+        List<ProductImage> imageList = product.getImageList();
+
+        if(imageList == null || imageList.size() == 0) {
+            return productDTO;
+        }
+
+        List<String> fileNameList = imageList.stream().map(productImage ->
+                productImage.getFileName()).toList();
+
+        productDTO.setUploadFileNames(fileNameList);
+
+        return productDTO;
+    }
 
 
 
