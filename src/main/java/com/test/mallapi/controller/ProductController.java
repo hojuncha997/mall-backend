@@ -5,7 +5,10 @@ package com.test.mallapi.controller;
 * */
 
 
+import com.test.mallapi.dto.PageRequestDTO;
+import com.test.mallapi.dto.PageResponseDTO;
 import com.test.mallapi.dto.ProductDTO;
+import com.test.mallapi.service.ProductService;
 import com.test.mallapi.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,7 +26,18 @@ import java.util.Map;
 @RequestMapping("/api/products")
 public class ProductController {
     
+    private final ProductService productService;    // ProductService 주입.
     private final CustomFileUtil fileUtil;
+
+
+    @GetMapping("/list")
+    public PageResponseDTO<ProductDTO> list(PageRequestDTO pageRequestDTO) {
+
+        log.info("list.........................." + pageRequestDTO);
+
+        return productService.getList(pageRequestDTO);
+    }
+
     
     
     @PostMapping("/")
@@ -45,4 +59,7 @@ public class ProductController {
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName) {
         return fileUtil.getFile(fileName);
     }
+
+
+
 }
