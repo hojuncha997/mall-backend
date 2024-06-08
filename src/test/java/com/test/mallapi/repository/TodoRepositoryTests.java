@@ -1,7 +1,6 @@
-package com.test.mallapi;
+package com.test.mallapi.repository;
 
 import com.test.mallapi.domain.Todo;
-import com.test.mallapi.repository.TodoRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
