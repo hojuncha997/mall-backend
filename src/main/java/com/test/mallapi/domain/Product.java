@@ -65,7 +65,7 @@ public class Product {
         addImage(productImage);
     }
 
-    public void clearImage(){
+    public void clearList(){
         imageList.clear();
     }
 }
@@ -96,3 +96,9 @@ public class Product {
 * ProductRepository에는 @Query와 @Modifying을 이용해서 update, delete 등의 JPQL을 실행할 수 있다.
 *
 * */
+
+
+/*
+ * 상품의 수정 부분은 Product의 ChangeXXX() 메서드를 이용해서 처리한다.
+ * 다만 상품 이미지는 clearList()를 이용해서 모두 삭제하고 다시 ProductImage를 추가하는 방식으로 구성한다.
+ * */
