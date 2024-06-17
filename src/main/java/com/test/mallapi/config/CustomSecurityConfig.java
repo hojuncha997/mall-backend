@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -24,17 +26,21 @@ public class CustomSecurityConfig {
 
         log.info("-------------------------Security Config-------------------------");
 
+        //  cors 설정
         http.cors(httpSecurityCorsConfigurer -> {
             httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
         });
 
+        //  서버에서 내부 세션을 생성하지 않도록  설정
         http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        //  csrf사용 X
         http.csrf(config -> config.disable());
 
         return http.build();
     }
 
+    //  이 CORS설정이 파라미터로 들어감
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration  = new CorsConfiguration();
@@ -48,6 +54,18 @@ public class CustomSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
+    /* 스프링 시큐리티는 사용자 패스워드에 PasswordEncoder를 설정해 줘야 한다.*/
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+
+
+
 }
 
 
