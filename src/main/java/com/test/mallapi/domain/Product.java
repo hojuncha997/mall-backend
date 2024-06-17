@@ -57,6 +57,8 @@ public class Product {
     }
 
     public void addImage(ProductImage productImage){
+        // 순서를 정하고 리스트에 집어 넣음
+        productImage.setOrd(this.imageList.size());
         imageList.add(productImage);
     }
 
