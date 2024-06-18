@@ -1,6 +1,7 @@
 package com.test.mallapi.config;
 
 
+import com.test.mallapi.security.handler.APILoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -39,8 +40,10 @@ public class CustomSecurityConfig {
 
         //  API서버로 로그인할 수 있도록 설정
         http.formLogin(config -> {
-            config.loginPage("/api/member/login");
             //  이 설정을 추가하면 POST 방식으로 username과 password란느 파라미터를 통해 로그인 처리 가능
+            config.loginPage("/api/member/login");
+            //  로그인 후 처리
+            config.successHandler(new APILoginSuccessHandler());
         });
 
         return http.build();

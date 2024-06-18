@@ -40,6 +40,8 @@ dependencies {
 	//	스프링 시큐리티
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+	// Gson : JSON 데이터 생성
+	implementation "com.google.code.gson:gson:2.10.1"
 }
 
 tasks.named('test') {
