@@ -1,5 +1,7 @@
 package com.test.mallapi.security.handler;
 
+import com.google.gson.Gson;
+import com.test.mallapi.dto.MemberDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
 
 @Log4j2
 public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -19,5 +23,21 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("-----------------------------------------------------");
         log.info(authentication);
         log.info("-----------------------------------------------------");
+
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        
+        Map<String, Object> claims = memberDTO.getClaims();
+        
+        claims.put("access token", ""); // 추후 구현
+        claims.put("refresh token", ""); // 추후 구현
+
+        Gson gson = new Gson();
+
+        String jsonStr = gson.toJson(claims);
+
+        response.setContentType("application/json; charset=utf-8");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println(jsonStr);
+        printWriter.close();
     }
 }
