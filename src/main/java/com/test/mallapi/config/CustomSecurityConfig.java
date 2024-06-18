@@ -37,6 +37,12 @@ public class CustomSecurityConfig {
         //  csrf사용 X
         http.csrf(config -> config.disable());
 
+        //  API서버로 로그인할 수 있도록 설정
+        http.formLogin(config -> {
+            config.loginPage("/api/member/login");
+            //  이 설정을 추가하면 POST 방식으로 username과 password란느 파라미터를 통해 로그인 처리 가능
+        });
+
         return http.build();
     }
 
