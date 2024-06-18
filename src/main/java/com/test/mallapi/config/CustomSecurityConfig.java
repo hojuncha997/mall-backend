@@ -1,6 +1,7 @@
 package com.test.mallapi.config;
 
 
+import com.test.mallapi.security.filter.JWTCheckFilter;
 import com.test.mallapi.security.handler.APILoginFailHandler;
 import com.test.mallapi.security.handler.APILoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -48,6 +50,8 @@ public class CustomSecurityConfig {
             //  로그인 실패 후 처리
             config.failureHandler(new APILoginFailHandler());
         });
+        
+        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class); //  JWT 체크
 
         return http.build();
     }
