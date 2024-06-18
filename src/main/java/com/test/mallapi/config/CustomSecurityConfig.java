@@ -1,6 +1,7 @@
 package com.test.mallapi.config;
 
 
+import com.test.mallapi.security.handler.APILoginFailHandler;
 import com.test.mallapi.security.handler.APILoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -44,6 +45,8 @@ public class CustomSecurityConfig {
             config.loginPage("/api/member/login");
             //  로그인 후 처리
             config.successHandler(new APILoginSuccessHandler());
+            //  로그인 실패 후 처리
+            config.failureHandler(new APILoginFailHandler());
         });
 
         return http.build();
