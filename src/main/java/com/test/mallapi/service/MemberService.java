@@ -2,6 +2,7 @@ package com.test.mallapi.service;
 
 import com.test.mallapi.domain.Member;
 import com.test.mallapi.dto.MemberDTO;
+import com.test.mallapi.dto.MemberModifyDTO;
 import jakarta.transaction.Transactional;
 
 import java.util.stream.Collectors;
@@ -16,6 +17,10 @@ public interface MemberService {
     * */
     MemberDTO getKakaoMember(String accessToken);
 
+
+    void modifyMember(MemberModifyDTO memberModifyDTO);
+
+
     default MemberDTO entityToDTO(Member member) {
         MemberDTO dto = new MemberDTO(
                 member.getEmail(),
@@ -27,5 +32,7 @@ public interface MemberService {
         return dto;
 
     }
+
+
 
 }

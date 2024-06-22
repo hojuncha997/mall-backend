@@ -4,6 +4,7 @@ package com.test.mallapi.service;
 import com.test.mallapi.domain.Member;
 import com.test.mallapi.domain.MemberRole;
 import com.test.mallapi.dto.MemberDTO;
+import com.test.mallapi.dto.MemberModifyDTO;
 import com.test.mallapi.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -204,6 +205,19 @@ public class MemberServiceImpl implements MemberService {
         member.addRole(MemberRole.USER);
 
         return member;
+    }
+
+    @Override
+    public void modifyMember(MemberModifyDTO memberModifyDTO) {
+        Optional<Member> result = memberRepository.findById(memberModifyDTO.getEmail());
+
+        Member member = result.orElseThrow();
+
+        member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
+        member.changeSocial(false);
+        member.changeNickname(memberModifyDTO.getNickname());
+
+        memberRepository.save(member);
     }
 
 }

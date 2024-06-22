@@ -2,11 +2,14 @@ package com.test.mallapi.controller;
 
 
 import com.test.mallapi.dto.MemberDTO;
+import com.test.mallapi.dto.MemberModifyDTO;
 import com.test.mallapi.service.MemberService;
 import com.test.mallapi.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -39,6 +42,17 @@ public class SocialController {
         return claims;
 
         // Map을 리턴한다는 것은 쉽게 말하면 JSON 형태로 데이터를 반환한다는 것이다. 이 데이터는 클라이언트에게 전달된다.
+    }
+
+
+    @PutMapping("/api/member/modify")
+    public Map<String, String> modify(@RequestBody MemberModifyDTO memberModifyDTO) {
+        log.info("member modify: " + memberModifyDTO);
+
+
+        memberService.modifyMember(memberModifyDTO);
+
+        return Map.of("result", "modified");
     }
 
 }
