@@ -17,7 +17,7 @@ public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ino;
+    private Long cino;
 
     @ManyToOne
     @JoinColumn(name = "product_pno")
