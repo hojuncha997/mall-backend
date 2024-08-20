@@ -8,6 +8,8 @@ import com.test.mallapi.dto.MemberModifyDTO;
 import com.test.mallapi.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,9 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -220,7 +224,16 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
+
+    @Override
+    public Page<MemberDTO> getMemberList(Pageable pageable) {
+        Page<Member> memberPage = memberRepository.findAll(pageable);
+        return memberPage.map(this::entityToDTO);
+    }
+
 }
+
+
 
 
 // 비동기로 통신하려면 webClient 를 사용할 수도 있다.
